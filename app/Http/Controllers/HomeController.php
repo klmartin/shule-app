@@ -70,4 +70,9 @@ class HomeController extends Controller
 
         return view('pages.support_team.dashboard', compact('class'),$d);
     }
+
+    public function sms_index()
+    {
+        return view('pages.admin.send_sms');
+    }
 }
