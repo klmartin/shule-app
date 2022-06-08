@@ -92,6 +92,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('select_class', 'PaymentController@select_class')->name('payments.select_class');
             Route::delete('reset_record/{id}', 'PaymentController@reset_record')->name('payments.reset_record');
             Route::post('pay_now/{id}', 'PaymentController@pay_now')->name('payments.pay_now');
+            Route::get('create_invoice/{class_id?}', 'PaymentController@create_invoice')->name('invoice.create');
+            Route::post('invoice_class', 'PaymentController@invoice_class')->name('payments.invoice_class');
+            Route::get('invoice_print/{id}', 'PaymentController@print_invoice')->name('payments.invoice_print');
         });
 
         /*************** Pins *****************/

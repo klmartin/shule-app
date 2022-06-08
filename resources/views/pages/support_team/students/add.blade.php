@@ -31,13 +31,6 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Email address: </label>
-                                <input type="email" value="{{ old('email') }}" name="email" class="form-control" placeholder="Email Address">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
                                 <label for="gender">Gender: <span class="text-danger">*</span></label>
                                 <select class="select form-control" id="gender" name="gender" required data-fouc data-placeholder="Choose..">
                                     <option value=""></option>
@@ -56,21 +49,16 @@
 
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Telephone:</label>
-                                <input value="{{ old('phone2') }}" type="text" name="phone2" class="form-control" placeholder="" >
+                                <label>Date of Birth:</label>
+                                <input name="dob" value="{{ old('dob') }}" type="text" class="form-control date-pick" placeholder="Select Date...">
+
                             </div>
                         </div>
 
                     </div>
 
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Date of Birth:</label>
-                                <input name="dob" value="{{ old('dob') }}" type="text" class="form-control date-pick" placeholder="Select Date...">
-
-                            </div>
-                        </div>
+                       
 
                         <div class="col-md-3">
                             <div class="form-group">
@@ -94,27 +82,6 @@
                             </select>
                         </div>
 
-                        <div class="col-md-3">
-                            <label for="lga_id">LGA: <span class="text-danger">*</span></label>
-                            <select required data-placeholder="Select State First" class="select-search form-control" name="lga_id" id="lga_id">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="bg_id">Blood Group: </label>
-                                <select class="select form-control" id="bg_id" name="bg_id" data-fouc data-placeholder="Choose..">
-                                    <option value=""></option>
-                                    @foreach(App\Models\BloodGroup::all() as $bg)
-                                        <option {{ (old('bg_id') == $bg->id ? 'selected' : '') }} value="{{ $bg->id }}">{{ $bg->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="d-block">Upload Passport Photo:</label>
@@ -122,8 +89,9 @@
                                 <span class="form-text text-muted">Accepted Images: jpeg, png. Max file size 2Mb</span>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
+        
                 </fieldset>
 
                 <h6>Student Data</h6>
@@ -136,7 +104,7 @@
                                     <option value=""></option>
                                     @foreach($my_classes as $c)
                                         <option {{ (old('my_class_id') == $c->id ? 'selected' : '') }} value="{{ $c->id }}">{{ $c->name }}</option>
-                                        @endforeach
+                                    @endforeach
                                 </select>
                         </div>
                             </div>
@@ -211,5 +179,14 @@
                 </fieldset>
 
             </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-white header-elements-inline">
+                <h6 class="card-title">Import Students From Excel</h6>
+
+                {!! Qs::getPanelOptions() !!}
+            </div>
+
         </div>
     @endsection

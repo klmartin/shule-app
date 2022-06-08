@@ -278,6 +278,16 @@ class Qs
         return self::getSetting('system_name');
     }
 
+    public static function getSystemAddress()
+    {
+        return self::getSetting('address');
+    }
+
+    public static function getSystemPhone()
+    {
+        return self::getSetting('phone');
+    }
+
     public static function findMyChildren($parent_id)
     {
         return StudentRecord::where('my_parent_id', $parent_id)->with(['user', 'my_class'])->get();
