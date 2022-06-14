@@ -6,13 +6,16 @@ use App\Helpers\Qs;
 use App\Repositories\UserRepo;
 use App\Models\Subject;
 use Illuminate\Support\Facades\DB;
+use App\Repositories\MyClassRepo;
+
 
 class HomeController extends Controller
 {
     protected $user;
-    public function __construct(UserRepo $user)
+    public function __construct(MyClassRepo $my_class, UserRepo $user)
     {
         $this->user = $user;
+        $this->my_class = $my_class;
     }
 
 
@@ -73,6 +76,8 @@ class HomeController extends Controller
 
     public function sms_index()
     {
-        return view('pages.admin.send_sms');
+        $data['selected'] = false;
+        $data['my_classes'] = $this->my_class->all();
+        return view('pages.admin.send_sms',$data);
     }
 }

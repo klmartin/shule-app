@@ -135,6 +135,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('select_year/{id}', 'MarkController@year_selected')->name('marks.year_select');
             Route::get('show/{id}/{year}', 'MarkController@show')->name('marks.show');
             Route::get('print/{id}/{exam_id}/{year}', 'MarkController@print_view')->name('marks.print');
+            Route::post('/class/student/', 'StudentRecordController@get_class_student')->name('class.student');
 
         });
 
