@@ -77,14 +77,8 @@
         $("#student_number").empty()
         ajax("{{ route('class.student') }}", "POST", {_token:token(),'class_id':$("#my_class_id").val()}, function(response){
             var obj = JSON.parse(response.responseText)
-            
-            for (var i = obj.length - 1; i >= 0; i--) {
-               console.log(obj[i])
-                $("#student_number").append("<option value="+obj[i].user.phone+"> "+obj[i].user.name+"  </option>")
-                
-            }
 
-            Object.values(obj).forEach(val => console.log(val));
+            Object.values(obj).forEach(val => $("#student_number").append("<option value="+val.user.phone+"> "+val.user.name+"  "+val.user.phone+"  </option>"));
            
         })
     })
