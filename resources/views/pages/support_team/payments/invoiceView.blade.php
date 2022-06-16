@@ -4,7 +4,7 @@
 <!-- col-lg-12 start here -->
 <div class="card card-default plain" id="dash_0">
     <!-- Start .card -->
-    <div class="card-body p30">
+    <div id="printable_div" class="card-body p30">
         <div class="row">
             <!-- Start .row -->
             <div class="col-lg-6">
@@ -94,7 +94,7 @@
                     </div>
                 </div>
                 <div class="invoice-footer mt25">
-                    <p class="text-center">Generated on Monday, October 08th, 2015 <a href="#" class="btn btn-default ml15"><i class="fa fa-print mr5"></i> Print</a></p>
+                    <p class="text-center">Generated on Monday, October 08th, 2015 <a onclick="printDiv()" href="#" class="btn btn-default ml15"><i class="fa fa-print mr5"></i> Print</a></p>
                 </div>
             </div>
             <!-- col-lg-12 end here -->
@@ -105,9 +105,27 @@
 <!-- End .card -->
 
 <style>
+
     body{
     margin-top:10px;
     background:#eee;    
 }
 </style>
+
+<script>
+    $('#printable_div').printThis();
+    function printDiv() {
+         $('#printable_div').printThis();
+            // var divContents = document.getElementById("printable_div").innerHTML;
+            // var a = window.open('', '', 'height=500, width=500');
+            // a.document.write('<html>');
+            // a.document.write("<link href='{{asset('assets/css/bootstrap.min.css')}}' rel='stylesheet' type='text/css'  media='print'>")
+            // a.document.write('<body > <h1>Div contents are <br>');
+            // a.document.write(divContents);
+            // a.document.write('</body></html>');
+            // a.document.close();
+
+            // a.print();
+        }
+</script>
 @endsection

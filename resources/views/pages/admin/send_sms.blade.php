@@ -32,7 +32,7 @@
                       </div>
                   </div>
               </div>
-              <br style="clear:both">
+            <br style="clear:both">
             <div class="form-group">                                
                 <label id="messageLabel" class="form-label font-weight-bold" for="message">Message </label>
                 <textarea class="form-control input-sm " type="textarea" id="message" placeholder="Message" maxlength="140" rows="7"></textarea>
@@ -40,9 +40,8 @@
             </div>
             <br style="clear:both">
             <div class="form-group col-md-2">
-                <button class="form-control input-sm btn btn-success disabled" id="btnSubmit" name="btnSubmit" type="button" style="height:35px"> Send</button>    
+                <button class="form-control input-sm btn btn-success disabled" id="btnSmsSubmit" name="btnSmsSubmit" type="button" style="height:35px"> Send</button>    
             </div>
-
           </form>
         </div>
    </div>
@@ -62,12 +61,12 @@
             if (len >= max) {
                 $('#characterLeft').text('You have reached the limit');
                 $('#characterLeft').addClass('red');
-                $('#btnSubmit').addClass('disabled');            
+                $('#btnSmsSubmit').addClass('disabled');            
             } 
             else {
                 var ch = max - len;
                 $('#characterLeft').text(ch + ' characters left');
-                $('#btnSubmit').removeClass('disabled');
+                $('#btnSmsSubmit').removeClass('disabled');
                 $('#characterLeft').removeClass('red');            
             }
         });    
@@ -79,8 +78,12 @@
             var obj = JSON.parse(response.responseText)
 
             Object.values(obj).forEach(val => $("#student_number").append("<option value="+val.user.phone+"> "+val.user.name+"  "+val.user.phone+"  </option>"));
-           
         })
+    })
+
+    $("#btnSmsSubmit").click(function(){
+        console.log('hello')
+
     })
 
    </script>
