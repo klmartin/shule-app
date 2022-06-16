@@ -84,7 +84,8 @@
     $("#btnSmsSubmit").click(function(){
 
         ajax("{{ route('sms.send_to_parent') }}", "POST", {_token:token(), 'phone_number':fieldValue("student_number"),'message':fieldValue("message")}, function(response){
-            console.log(response)
+
+            flash({msg : response.responseText, type : 'success'});
         })
 
     })
