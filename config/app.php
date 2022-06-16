@@ -52,9 +52,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost/school/lav_sms/'),
+    'url' => env('APP_URL', 'http://localhost/shule-app/'),
 
-    'asset_url' => env('ASSET_URL', 'http://localhost/school/lav_sms/public'),
+    'asset_url' => env('ASSET_URL', 'http://localhost/shule-app/public'),
 
     /*
     |--------------------------------------------------------------------------
