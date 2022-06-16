@@ -324,6 +324,10 @@
         form[0].reset();
     }
 
+    function fieldValue(fieldId){
+        return $("#"+fieldId).val()
+    }
+
 
 
 </script>

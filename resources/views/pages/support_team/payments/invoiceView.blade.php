@@ -105,27 +105,16 @@
 <!-- End .card -->
 
 <style>
-
-    body{
+body{
     margin-top:10px;
     background:#eee;    
 }
 </style>
 
 <script>
-    $('#printable_div').printThis();
-    function printDiv() {
-         $('#printable_div').printThis();
-            // var divContents = document.getElementById("printable_div").innerHTML;
-            // var a = window.open('', '', 'height=500, width=500');
-            // a.document.write('<html>');
-            // a.document.write("<link href='{{asset('assets/css/bootstrap.min.css')}}' rel='stylesheet' type='text/css'  media='print'>")
-            // a.document.write('<body > <h1>Div contents are <br>');
-            // a.document.write(divContents);
-            // a.document.write('</body></html>');
-            // a.document.close();
-
-            // a.print();
-        }
+    function printDiv() 
+    {
+        $('#printable_div').printThis();
+    }
 </script>
 @endsection

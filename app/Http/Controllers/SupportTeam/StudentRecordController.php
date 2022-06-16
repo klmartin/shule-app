@@ -21,8 +21,8 @@ class StudentRecordController extends Controller
 {
     protected $loc, $my_class, $user, $student;
 
-   public function __construct(LocationRepo $loc, MyClassRepo $my_class, UserRepo $user, StudentRepo $student)
-   {
+    public function __construct(LocationRepo $loc, MyClassRepo $my_class, UserRepo $user, StudentRepo $student)
+    {
        $this->middleware('teamSA', ['only' => ['edit','update', 'reset_pass', 'create', 'store', 'graduated'] ]);
        $this->middleware('super_admin', ['only' => ['destroy',] ]);
 
@@ -30,7 +30,7 @@ class StudentRecordController extends Controller
         $this->my_class = $my_class;
         $this->user = $user;
         $this->student = $student;
-   }
+    }
 
     public function reset_pass($st_id)
     {

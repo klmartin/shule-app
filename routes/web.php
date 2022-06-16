@@ -178,5 +178,6 @@ Route::group(['namespace' => 'MyParent','middleware' => 'my_parent',], function(
 /************************* SMS *******************************/
 Route::group(['prefix' => 'sms', 'middleware' => 'super_admin'], function(){
     Route::get('/send_sms', 'HomeController@sms_index')->name('sms.send_sms');
+    Route::post('/sene_sms_parent', 'HomeController@sms_to_parent')->name('sms.send_to_parent');
 
 });

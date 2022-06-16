@@ -74,7 +74,7 @@
 
     $("#my_class_id").change(function(){
         $("#student_number").empty()
-        ajax("{{ route('class.student') }}", "POST", {_token:token(),'class_id':$("#my_class_id").val()}, function(response){
+        ajax("{{ route('class.student') }}", "POST", {_token:token(),'class_id':fieldValue("my_class_id")}, function(response){
             var obj = JSON.parse(response.responseText)
 
             Object.values(obj).forEach(val => $("#student_number").append("<option value="+val.user.phone+"> "+val.user.name+"  "+val.user.phone+"  </option>"));
@@ -82,7 +82,10 @@
     })
 
     $("#btnSmsSubmit").click(function(){
-        console.log('hello')
+
+        ajax("{{ route('sms.send_to_parent') }}", "POST", {_token:token(), 'phone_number':fieldValue("student_number"),'message':fieldValue("message")}, function(response){
+            console.log(response)
+        })
 
     })
 
