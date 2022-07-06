@@ -192,6 +192,7 @@
                             <li class="nav-item">
                                 <a href="{{ route('marks.batch_fix') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['marks.batch_fix']) ? 'active' : '' }}">Batch Fix</a>
                             </li>
+
                         @endif
 
                         
@@ -216,6 +217,12 @@
 
 
                 {{--End Exam--}}
+
+                {{--Excel Marks to SMS--}}
+                <li class="nav-item">
+                    <a href="{{ route('marks.excel_import') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['marks.excel_import']) ? 'active' : '' }}"><i class="icon-cloud-download"></i>Import Marks</a>
+                </li>
+
                 {{--SMS--}}
                 <li class="nav-item">
                     <a href=" {{route('sms.send_sms')}} " class="nav-link {{ in_array(Route::currentRouteName(), ['sms.send_sms', 'sms.send_sms']) ? 'active' : '' }}"><i class="icon-envelope"></i><span> SMS </span></a>
