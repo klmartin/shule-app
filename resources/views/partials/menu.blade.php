@@ -60,6 +60,26 @@
 
                         {{--Timetables--}}
                             <li class="nav-item"><a href="{{ route('tt.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['tt.index']) ? 'active' : '' }}">Timetables</a></li>
+                        {{--Manage Classes--}}
+                        <li class="nav-item">
+                            <a href="{{ route('classes.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['classes.index','classes.edit']) ? 'active' : '' }}"><i class="icon-windows2"></i> <span> Classes</span></a>
+                        </li>
+
+                        {{--Manage Dorms--}}
+                        <li class="nav-item">
+                            <a href="{{ route('dorms.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['dorms.index','dorms.edit']) ? 'active' : '' }}"><i class="icon-home9"></i> <span> Dormitories</span></a>
+                        </li>
+
+                        {{--Manage Sections--}}
+                        <li class="nav-item">
+                            <a href="{{ route('sections.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['sections.index','sections.edit',]) ? 'active' : '' }}"><i class="icon-fence"></i> <span>Sections</span></a>
+                        </li>
+
+                        {{--Manage Subjects--}}
+                        <li class="nav-item">
+                            <a href="{{ route('subjects.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['subjects.index','subjects.edit',]) ? 'active' : '' }}"><i class="icon-pin"></i> <span>Subjects</span></a>
+                        </li>
+
                         </ul>
                     </li>
                     @endif
@@ -139,25 +159,7 @@
                         <a href="{{ route('users.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['users.index', 'users.show', 'users.edit']) ? 'active' : '' }}"><i class="icon-users4"></i> <span> Users</span></a>
                     </li>
 
-                    {{--Manage Classes--}}
-                    <li class="nav-item">
-                        <a href="{{ route('classes.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['classes.index','classes.edit']) ? 'active' : '' }}"><i class="icon-windows2"></i> <span> Classes</span></a>
-                    </li>
-
-                    {{--Manage Dorms--}}
-                    <li class="nav-item">
-                        <a href="{{ route('dorms.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['dorms.index','dorms.edit']) ? 'active' : '' }}"><i class="icon-home9"></i> <span> Dormitories</span></a>
-                    </li>
-
-                    {{--Manage Sections--}}
-                    <li class="nav-item">
-                        <a href="{{ route('sections.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['sections.index','sections.edit',]) ? 'active' : '' }}"><i class="icon-fence"></i> <span>Sections</span></a>
-                    </li>
-
-                    {{--Manage Subjects--}}
-                    <li class="nav-item">
-                        <a href="{{ route('subjects.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['subjects.index','subjects.edit',]) ? 'active' : '' }}"><i class="icon-pin"></i> <span>Subjects</span></a>
-                    </li>
+                    
                 @endif
 
                 {{--Exam--}}
@@ -191,6 +193,8 @@
                             </li>
                         @endif
 
+                        
+
                         @if(Qs::userIsTeamSAT())
                             {{--Marks Manage--}}
                             <li class="nav-item">
@@ -211,7 +215,10 @@
 
 
                 {{--End Exam--}}
-
+                {{--SMS--}}
+                <li class="nav-item">
+                    <a href=" {{route('sms.send_sms')}} " class="nav-link {{ in_array(Route::currentRouteName(), ['sms.send_sms', 'sms.send_sms']) ? 'active' : '' }}"><i class="icon-envelope"></i><span> SMS </span></a>
+                </li>
                 @include('pages.'.Qs::getUserType().'.menu')
 
                 {{--Manage Account--}}
