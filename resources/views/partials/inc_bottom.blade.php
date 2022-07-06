@@ -40,7 +40,7 @@
 <script src="{{ asset('global_assets/js/demo_pages/fullcalendar_basic.js') }}"></script>
 
 <!-- /theme JS files -->
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src=" {{ asset('assets/js/custom.js') }} "></script>
 
 @include('partials.js.custom_js')

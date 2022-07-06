@@ -4,15 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Qs;
 use App\Repositories\UserRepo;
+use App\Repositories\SmsRepo;
 use App\Models\Subject;
 use Illuminate\Support\Facades\DB;
+use App\Repositories\MyClassRepo;
+use Illuminate\Http\Request;
+
 
 class HomeController extends Controller
 {
     protected $user;
-    public function __construct(UserRepo $user)
+    public function __construct(MyClassRepo $my_class, UserRepo $user, SmsRepo $sms)
     {
         $this->user = $user;
+        $this->my_class = $my_class;
+        $this->sms = $sms;
     }
 
 
@@ -69,5 +75,12 @@ class HomeController extends Controller
         }
 
         return view('pages.support_team.dashboard', compact('class'),$d);
+    }
+
+    public function sms_index()
+    {
+        $data['selected'] = false;
+        $data['my_classes'] = $this->my_class->all();
+        return view('pages.admin.send_sms',$data);
     }
 }

@@ -114,6 +114,9 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('tabulation/{exam?}/{class?}/{sec_id?}', 'MarkController@tabulation')->name('marks.tabulation');
                 Route::post('tabulation', 'MarkController@tabulation_select')->name('marks.tabulation_select');
                 Route::get('tabulation/print/{exam}/{class}/{sec_id}', 'MarkController@print_tabulation')->name('marks.print_tabulation');
+                Route::get('excel_import', 'MarkController@excel_import')->name('marks.excel_import');
+                Route::post('upload/excel', 'MarkController@upload_excel')->name('marks.upload_excel');
+                Route::post('send-marks', 'MarkController@sendSMS')->name('marks.send.sms');
             });
 
             // FOR teamSAT
@@ -132,6 +135,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('select_year/{id}', 'MarkController@year_selected')->name('marks.year_select');
             Route::get('show/{id}/{year}', 'MarkController@show')->name('marks.show');
             Route::get('print/{id}/{exam_id}/{year}', 'MarkController@print_view')->name('marks.print');
+            Route::post('/class/student/', 'StudentRecordController@get_class_student')->name('class.student');
 
         });
 
@@ -168,5 +172,12 @@ Route::group(['namespace' => 'SuperAdmin','middleware' => 'super_admin', 'prefix
 Route::group(['namespace' => 'MyParent','middleware' => 'my_parent',], function(){
 
     Route::get('/my_children', 'MyController@children')->name('my_children');
+
+});
+
+/************************* SMS *******************************/
+Route::group(['prefix' => 'sms', 'middleware' => 'super_admin'], function(){
+    Route::get('/send_sms', 'HomeController@sms_index')->name('sms.send_sms');
+    Route::post('/sene_sms_parent', 'HomeController@sms_to_parent')->name('sms.send_to_parent');
 
 });
