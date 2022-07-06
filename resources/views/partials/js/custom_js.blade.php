@@ -74,6 +74,49 @@
         })
     }
 
+    function ajax(url, method = 'POST', data, callback)
+    {
+        $.ajax({
+            url: url,
+            method: method,
+            data: data, 
+            headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/x-www-form-urlencoded;",
+            },
+            beforeSend: function ()
+            {
+
+            },
+            error: function (response)
+            {
+              switch (true) {
+                  case typeof response.responseText !== 'undefined':
+                      console.log(response.responseText);
+                      break;
+                  case response.statusText !== 'abort' && e.status === 0:
+                      alert('Please check your internet connection');
+                      break;
+                  case response.statusText === 'abort':
+                      break;
+                  default:
+                      console.error(response);
+              }
+            },
+            complete: function (response)
+            {
+              callback(response);
+
+            }
+        }
+        );
+    }
+
+    function token()
+    {
+        var token = $("meta[name='csrf-token']").attr("content")
+        return token
+    }
 
     {{--Notifications--}}
 
@@ -328,7 +371,6 @@
     function fieldValue(fieldId){
         return $("#"+fieldId).val()
     }
-
 
 
 

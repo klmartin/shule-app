@@ -21,8 +21,8 @@ class StudentRecordController extends Controller
 {
     protected $loc, $my_class, $user, $student;
 
-   public function __construct(LocationRepo $loc, MyClassRepo $my_class, UserRepo $user, StudentRepo $student)
-   {
+    public function __construct(LocationRepo $loc, MyClassRepo $my_class, UserRepo $user, StudentRepo $student)
+    {
        $this->middleware('teamSA', ['only' => ['edit','update', 'reset_pass', 'create', 'store', 'graduated'] ]);
        $this->middleware('super_admin', ['only' => ['destroy',] ]);
 
@@ -30,7 +30,7 @@ class StudentRecordController extends Controller
         $this->my_class = $my_class;
         $this->user = $user;
         $this->student = $student;
-   }
+    }
 
     public function reset_pass($st_id)
     {
@@ -74,7 +74,6 @@ class StudentRecordController extends Controller
             $f['path'] = $photo->storeAs(Qs::getUploadPath('student').$data['code'], $f['name']);
             $data['photo'] = asset('storage/' . $f['path']);
         }
-
         $user = $this->user->create($data); // Create User
 
         $sr['adm_no'] = $data['username'];
@@ -185,16 +184,17 @@ class StudentRecordController extends Controller
 
     public function upload_excel(Request $request)
     {
+        if ($request->file('file')) {
 
-         // if ($request->file('file')) {
-            dd($request->all());
             $folderPath = 'storage/uploads/';
             $extension = $request->file('file')->getClientOriginalExtension();
             $fileName = $folderPath . uniqid() . '.' . $extension;
 
+            //$path = $request->file('file')->storePubliclyAs('/public/uploads', $imageName);
             $path = config('app.url').'/public/assets';
 
             move_uploaded_file($path, $fileName);
+            // Storage::disk()->putFileAs( );
 
             $array = array('delimiter' => ',');
 
@@ -210,9 +210,9 @@ class StudentRecordController extends Controller
             ];
 
             return json_encode($data);
-        // }
+        }
 
-        // return json_encode("No File Found");
+        return json_encode("No File Found");
     }
 
     public function get_class_student(Request $request)

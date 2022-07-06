@@ -83,4 +83,11 @@ class HomeController extends Controller
         $data['my_classes'] = $this->my_class->all();
         return view('pages.admin.send_sms',$data);
     }
+
+    public function sms_to_parent(Request $request)
+    {
+        return $this->sms->send_sms($request->phone_number,$request->message);
+    }
+
+   
 }

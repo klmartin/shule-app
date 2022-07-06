@@ -9,7 +9,7 @@
             {!! Qs::getPanelOptions() !!}
         </div>
         <div class="card-body">
-            <form method="post" >
+            <form method="post" action="{{ route('payments.invoice_class') }}">
                 @csrf
               <div class="row">
                   <div class="col">

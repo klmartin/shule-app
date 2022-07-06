@@ -11,6 +11,7 @@ use App\Models\Setting;
 use App\Repositories\MyClassRepo;
 use App\Repositories\PaymentRepo;
 use App\Repositories\StudentRepo;
+use App\Repositories\UserRepo;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -20,13 +21,13 @@ class PaymentController extends Controller
 {
     protected $my_class, $pay, $student, $year;
 
-    public function __construct(MyClassRepo $my_class, PaymentRepo $pay, StudentRepo $student)
+    public function __construct(MyClassRepo $my_class, PaymentRepo $pay, StudentRepo $student, UserRepo $user)
     {
         $this->my_class = $my_class;
         $this->pay = $pay;
         $this->year = Qs::getCurrentSession();
         $this->student = $student;
-
+        $this->user = $user;
         $this->middleware('teamAccount');
     }
 
@@ -238,5 +239,70 @@ class PaymentController extends Controller
         $this->pay->deleteReceipts(['pr_id' => $id]);
 
         return back()->with('flash_success', __('msg.update_ok'));
+    }
+
+    public function create_invoice($class_id = NULL)
+    {
+        $data['my_classes'] = $this->my_class->all();
+        $data['selected'] = false;
+        if($class_id){
+            $data['students'] = $st = $this->student->getRecord(['my_class_id' => $class_id])->get()->sortBy('user.name');
+            if($st->count() < 1){
+                return Qs::goWithDanger('payments.create_invoice');
+            }
+            $data['selected'] = true;
+            $data['my_class_id'] = $class_id;
+        }
+
+        return view('pages.support_team.payments.invoiceCreate', $data);
+
+    }
+
+    public function invoice_class(Request $req)
+    {
+        $this->validate($req, [
+            'my_class_id' => 'required|exists:my_classes,id'
+        ], [], ['my_class_id' => 'Class']);
+
+        $wh['my_class_id'] = $class_id = $req->my_class_id;
+
+        $pay1 = $this->pay->getPayment(['my_class_id' => $class_id, 'year' => $this->year])->get();
+        $pay2 = $this->pay->getGeneralPayment(['year' => $this->year])->get();
+        $payments = $pay2->count() ? $pay1->merge($pay2) : $pay1;
+        $students = $this->student->getRecord($wh)->get();
+
+        if($payments->count() && $students->count()){
+            foreach($payments as $p){
+                foreach($students as $st){
+                    $pr['student_id'] = $st->user_id;
+                    $pr['payment_id'] = $p->id;
+                    $pr['year'] = $this->year;
+                    $rec = $this->pay->createRecord($pr);
+                    $rec->ref_no ?: $rec->update(['ref_no' => mt_rand(100000, 99999999)]);
+
+                }
+            }
+        }
+        return Qs::goToRoute(['invoice.create', $class_id]);
+    }
+
+    public function print_invoice($st_id, $year = NULL)
+    {
+        if(!$st_id) {return Qs::goWithDanger();}
+
+        $inv = $year ? $this->pay->getAllMyPR($st_id, $year) : $this->pay->getAllMyPR($st_id);
+
+        $data['sr'] = $this->student->findByUserId($st_id)->first();
+        $pr = $inv->get();
+        $data['uncleared'] = $pr->where('paid', 0);
+        $data['cleared'] = $pr->where('paid', 1);
+        $data['std_info'] = $this->eloquent_object($this->user->find($st_id));
+
+        return view('pages.support_team.payments.invoiceView',$data);
+    }
+
+    public function eloquent_object($obj)
+    {
+        return json_decode(json_encode($obj));
     }
 }

@@ -31,7 +31,7 @@
 {{--Calendar--}}
 <script src="{{ asset('global_assets/js/plugins/ui/fullcalendar/fullcalendar.min.js') }}"></script>
 
-
+<script src=" {{ asset('assets/js/printThis.js') }} "></script>
 <script src=" {{ asset('assets/js/app.js') }} "></script>
 <script src="{{ asset('global_assets/js/demo_pages/form_wizard.js') }}"></script>
 <script src="{{ asset('global_assets/js/demo_pages/form_select2.js') }}"></script>
