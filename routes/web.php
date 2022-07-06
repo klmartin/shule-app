@@ -117,6 +117,9 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('tabulation/{exam?}/{class?}/{sec_id?}', 'MarkController@tabulation')->name('marks.tabulation');
                 Route::post('tabulation', 'MarkController@tabulation_select')->name('marks.tabulation_select');
                 Route::get('tabulation/print/{exam}/{class}/{sec_id}', 'MarkController@print_tabulation')->name('marks.print_tabulation');
+                Route::get('excel_import', 'MarkController@excel_import')->name('marks.excel_import');
+                Route::post('upload/excel', 'MarkController@upload_excel')->name('marks.upload_excel');
+                Route::post('send-marks', 'MarkController@sendSMS')->name('marks.send.sms');
             });
 
             // FOR teamSAT

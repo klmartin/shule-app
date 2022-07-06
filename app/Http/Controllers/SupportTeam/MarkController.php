@@ -12,6 +12,7 @@ use App\Repositories\MyClassRepo;
 use App\Http\Controllers\Controller;
 use App\Repositories\StudentRepo;
 use Illuminate\Http\Request;
+use App\Services\SMSService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -469,6 +470,185 @@ class MarkController extends Controller
     protected function checkPinVerified($st_id)
     {
         return Session::has('pin_verified') && Session::get('pin_verified') == $st_id;
+    }
+    
+    public function excel_import()
+    {
+        $d['exams'] = $this->exam->getExam(['year' => $this->year]);
+        $d['my_classes'] = $this->my_class->all();
+        return view('pages.support_team.marks.import.index',$d);
+    }
+
+    public function upload_excel(Request $request)
+    {
+        if ($request->file('file')) {
+            
+            return json_encode($this->csvToArray($request->file('file')));
+        }
+
+        return json_encode("No File Found");
+    }
+
+    public function csvToArray($filename = '', $delimiter = ',')
+    {
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false)
+        {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+            {
+                if (!$header)
+                    $header = $row;
+                else
+                    $data[] = array_merge($header, $row);
+            }
+            fclose($handle);
+        }
+        $trimmed_array = [];
+        foreach ($data as $key => $value) {
+            array_push($trimmed_array, array_map('trim', $value));
+        }
+        $newarray = [];
+        foreach ($trimmed_array as $key => $value) {
+            array_push($newarray, array_filter($value, fn($value) => !is_null($value) && $value !== ''));
+        }
+        $result = [];
+        foreach ($newarray as $key => $value) {  
+            $result[count($value)][] = $value;
+        }
+        return $result;
+
+    }
+
+    public function check_csv_type($file)
+    {
+        $type = $file->getClientOriginalExtension();
+              
+        if ($type <> 'csv') {
+            
+            return json_encode('Wrong file extension Only CSV is allowed');
+            return redirect()->back();
+        }
+    }
+
+    public function sendSMS(Request $request)
+    {
+        try {
+            $data = $request->all();
+            $students =  json_decode($data['data'], true);
+            foreach($students as $key=>$rows) {
+                $message = "MASAKA NURSERY AND PRIMARY SCHOOL \n";
+                $message .= "PUPIL'S NAME: ".$rows['Pupil']." \n";
+                $message .= "MID-TERM RESULTS\n";
+                $message .= "MATHEMATICS: ".$rows['Math']." - ".$rows['MathGrade']." \n";
+                $message .= "ENGLISH: ".$rows['English']." - ".$rows['EnglishGrade']."\n";
+                $message .= "KISWAHILI: ".$rows['Kiswahili']." - ".$rows['KiswahiliGrade']."\n";
+                $message .= "SCIENCE AND TECHNOLOGY: ".$rows['Science']." - ".$rows['ScienceGrade']."\n";
+                $message .= "SOCIAL STUDIES: ".$rows['SST']." - ".$rows['SSTGrade']."\n";
+                $message .= "CIVIC AND MORAL EDUCATION: ".$rows['CME']." - ".$rows['CMEGrade']."\n";
+                $message .= "POSITION: ".$rows['Position']." \n";
+                $message .= "Quality Education is The Ultimate Investment. \n";
+                $message .= "THANKS";
+                $sms = app(SMSService::class);
+                $response = $sms->registration($rows['Phone'], $message);
+            }
+            return $data;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+
+    public function excel_import()
+    {
+        $d['exams'] = $this->exam->getExam(['year' => $this->year]);
+        $d['my_classes'] = $this->my_class->all();
+        return view('pages.support_team.marks.import.index',$d);
+    }
+
+    public function upload_excel(Request $request)
+    {
+        if ($request->file('file')) {
+            
+            return json_encode($this->csvToArray($request->file('file')));
+        }
+
+        return json_encode("No File Found");
+    }
+
+    public function csvToArray($filename = '', $delimiter = ',')
+    {
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false)
+        {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+            {
+                if (!$header)
+                    $header = $row;
+                else
+                    $data[] = array_merge($header, $row);
+            }
+            fclose($handle);
+        }
+        $trimmed_array = [];
+        foreach ($data as $key => $value) {
+            array_push($trimmed_array, array_map('trim', $value));
+        }
+        $newarray = [];
+        foreach ($trimmed_array as $key => $value) {
+            array_push($newarray, array_filter($value, fn($value) => !is_null($value) && $value !== ''));
+        }
+        $result = [];
+        foreach ($newarray as $key => $value) {  
+            $result[count($value)][] = $value;
+        }
+        return $result;
+
+    }
+
+    public function check_csv_type($file)
+    {
+        $type = $file->getClientOriginalExtension();
+              
+        if ($type <> 'csv') {
+            
+            return json_encode('Wrong file extension Only CSV is allowed');
+            return redirect()->back();
+        }
+    }
+
+    public function sendSMS(Request $request)
+    {
+        try {
+            $data = $request->all();
+            $students =  json_decode($data['data'], true);
+            foreach($students as $key=>$rows) {
+                $message = "MASAKA NURSERY AND PRIMARY SCHOOL \n";
+                $message .= "PUPIL'S NAME: ".$rows['Pupil']." \n";
+                $message .= "MID-TERM RESULTS\n";
+                $message .= "MATHEMATICS: ".$rows['Math']." - ".$rows['MathGrade']." \n";
+                $message .= "ENGLISH: ".$rows['English']." - ".$rows['EnglishGrade']."\n";
+                $message .= "KISWAHILI: ".$rows['Kiswahili']." - ".$rows['KiswahiliGrade']."\n";
+                $message .= "SCIENCE AND TECHNOLOGY: ".$rows['Science']." - ".$rows['ScienceGrade']."\n";
+                $message .= "SOCIAL STUDIES: ".$rows['SST']." - ".$rows['SSTGrade']."\n";
+                $message .= "CIVIC AND MORAL EDUCATION: ".$rows['CME']." - ".$rows['CMEGrade']."\n";
+                $message .= "POSITION: ".$rows['Position']." \n";
+                $message .= "Quality Education is The Ultimate Investment. \n";
+                $message .= "THANKS";
+                $sms = app(SMSService::class);
+                $response = $sms->registration($rows['Phone'], $message);
+            }
+            return $data;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
 }
