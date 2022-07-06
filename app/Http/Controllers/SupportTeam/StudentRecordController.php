@@ -74,7 +74,6 @@ class StudentRecordController extends Controller
             $f['path'] = $photo->storeAs(Qs::getUploadPath('student').$data['code'], $f['name']);
             $data['photo'] = asset('storage/' . $f['path']);
         }
-
         $user = $this->user->create($data); // Create User
 
         $sr['adm_no'] = $data['username'];
