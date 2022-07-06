@@ -15,13 +15,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 
 class StudentRecordController extends Controller
 {
     protected $loc, $my_class, $user, $student;
 
-   public function __construct(LocationRepo $loc, MyClassRepo $my_class, UserRepo $user, StudentRepo $student)
-   {
+    public function __construct(LocationRepo $loc, MyClassRepo $my_class, UserRepo $user, StudentRepo $student)
+    {
        $this->middleware('teamSA', ['only' => ['edit','update', 'reset_pass', 'create', 'store', 'graduated'] ]);
        $this->middleware('super_admin', ['only' => ['destroy',] ]);
 
@@ -29,7 +30,7 @@ class StudentRecordController extends Controller
         $this->my_class = $my_class;
         $this->user = $user;
         $this->student = $student;
-   }
+    }
 
     public function reset_pass($st_id)
     {
@@ -73,7 +74,6 @@ class StudentRecordController extends Controller
             $f['path'] = $photo->storeAs(Qs::getUploadPath('student').$data['code'], $f['name']);
             $data['photo'] = asset('storage/' . $f['path']);
         }
-
         $user = $this->user->create($data); // Create User
 
         $sr['adm_no'] = $data['username'];
@@ -180,6 +180,44 @@ class StudentRecordController extends Controller
         $this->user->delete($sr->user->id);
 
         return back()->with('flash_success', __('msg.del_ok'));
+    }
+
+    public function upload_excel(Request $request)
+    {
+        if ($request->file('file')) {
+
+            $folderPath = 'storage/uploads/';
+            $extension = $request->file('file')->getClientOriginalExtension();
+            $fileName = $folderPath . uniqid() . '.' . $extension;
+
+            //$path = $request->file('file')->storePubliclyAs('/public/uploads', $imageName);
+            $path = config('app.url').'/public/assets';
+
+            move_uploaded_file($path, $fileName);
+            // Storage::disk()->putFileAs( );
+
+            $array = array('delimiter' => ',');
+
+            $file_handle = fopen($request->file('file'), 'r');
+            while (!feof($file_handle)) {
+                $line_of_text[] = fgetcsv($file_handle, 0, $array['delimiter']);
+            }
+            fclose($file_handle);
+            
+            $data = [
+                'filename' => $fileName,
+                'content' => $line_of_text[0]
+            ];
+
+            return json_encode($data);
+        }
+
+        return json_encode("No File Found");
+    }
+
+    public function get_class_student(Request $request)
+    {
+        return $this->student->findStudentsByClass($request->class_id);
     }
 
 }

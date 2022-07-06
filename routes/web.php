@@ -92,6 +92,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('select_class', 'PaymentController@select_class')->name('payments.select_class');
             Route::delete('reset_record/{id}', 'PaymentController@reset_record')->name('payments.reset_record');
             Route::post('pay_now/{id}', 'PaymentController@pay_now')->name('payments.pay_now');
+            Route::get('create_invoice/{class_id?}', 'PaymentController@create_invoice')->name('invoice.create');
+            Route::post('invoice_class', 'PaymentController@invoice_class')->name('payments.invoice_class');
+            Route::get('invoice_print/{id}', 'PaymentController@print_invoice')->name('payments.invoice_print');
         });
 
         /*************** Pins *****************/
@@ -132,6 +135,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('select_year/{id}', 'MarkController@year_selected')->name('marks.year_select');
             Route::get('show/{id}/{year}', 'MarkController@show')->name('marks.show');
             Route::get('print/{id}/{exam_id}/{year}', 'MarkController@print_view')->name('marks.print');
+            Route::post('/class/student/', 'StudentRecordController@get_class_student')->name('class.student');
 
         });
 
@@ -174,5 +178,6 @@ Route::group(['namespace' => 'MyParent','middleware' => 'my_parent',], function(
 /************************* SMS *******************************/
 Route::group(['prefix' => 'sms', 'middleware' => 'super_admin'], function(){
     Route::get('/send_sms', 'HomeController@sms_index')->name('sms.send_sms');
+    Route::post('/sene_sms_parent', 'HomeController@sms_to_parent')->name('sms.send_to_parent');
 
 });

@@ -4,15 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Qs;
 use App\Repositories\UserRepo;
+use App\Repositories\SmsRepo;
 use App\Models\Subject;
 use Illuminate\Support\Facades\DB;
+use App\Repositories\MyClassRepo;
+use Illuminate\Http\Request;
+
 
 class HomeController extends Controller
 {
     protected $user;
-    public function __construct(UserRepo $user)
+    public function __construct(MyClassRepo $my_class, UserRepo $user, SmsRepo $sms)
     {
         $this->user = $user;
+        $this->my_class = $my_class;
+        $this->sms = $sms;
     }
 
 
@@ -73,6 +79,15 @@ class HomeController extends Controller
 
     public function sms_index()
     {
-        return view('pages.admin.send_sms');
+        $data['selected'] = false;
+        $data['my_classes'] = $this->my_class->all();
+        return view('pages.admin.send_sms',$data);
     }
+
+    public function sms_to_parent(Request $request)
+    {
+        return $this->sms->send_sms($request->phone_number,$request->message);
+    }
+
+   
 }
