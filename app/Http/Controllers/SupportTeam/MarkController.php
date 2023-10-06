@@ -562,22 +562,22 @@ class MarkController extends Controller
     }
 
 
-    public function excel_import()
-    {
-        $d['exams'] = $this->exam->getExam(['year' => $this->year]);
-        $d['my_classes'] = $this->my_class->all();
-        return view('pages.support_team.marks.import.index',$d);
-    }
+    // public function excel_import()
+    // {
+    //     $d['exams'] = $this->exam->getExam(['year' => $this->year]);
+    //     $d['my_classes'] = $this->my_class->all();
+    //     return view('pages.support_team.marks.import.index',$d);
+    // }
 
-    public function upload_excel(Request $request)
-    {
-        if ($request->file('file')) {
+    // public function upload_excel(Request $request)
+    // {
+    //     if ($request->file('file')) {
             
-            return json_encode($this->csvToArray($request->file('file')));
-        }
+    //         return json_encode($this->csvToArray($request->file('file')));
+    //     }
 
-        return json_encode("No File Found");
-    }
+    //     return json_encode("No File Found");
+    // }
 
     public function csvToArray($filename = '', $delimiter = ',')
     {
